@@ -110,6 +110,10 @@ export const useAuthStore = defineStore("auth", {
             confirmButtonText: "OK",
           }).then((result) => {
             if (result.isConfirmed) {
+              const token = useCookie("token");
+              const user = useCookie("user");
+              user.value = null;
+              token.value = null;
               const router = useRouter();
               router.push("/login");
             }

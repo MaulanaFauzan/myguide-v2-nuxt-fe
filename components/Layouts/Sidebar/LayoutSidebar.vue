@@ -2,15 +2,20 @@
 import PerfectScrollbar from "perfect-scrollbar"
 import SidebarItem from "./SidebarItem.vue";
 import Dark from "./Dark.vue";
-import {useStore} from '~/store';
-import {ref, watch, computed, onMounted} from "vue";
+import { useStore } from '~/store';
+import { ref, watch, computed, onMounted } from "vue";
+import { useAuthStore } from "~/store/auth";
+
+const { logUserOut } = useAuthStore();
 
 const store = useStore()
 const isSidebarActive = computed(() => store.isSidebarActive)
 
 const sidebarWrapper = ref<HTMLElement>()
 
-
+const logout = () => {
+  logUserOut();
+}
 /**
  * On Window Resize
  */
@@ -82,12 +87,16 @@ watch(() => store.isSidebarActive, (isSidebarActive) => {
         <div class="d-flex justify-content-between">
           <div class="logo">
             <nuxt-link to="/"><img src="~/assets/images/logo/logo.png" alt="Logo"></nuxt-link>
+
           </div>
-          <Dark />
+          <div style="width: 40%;" class="buttons mt-1">
+            <button @click="logout" class="btn btn-danger round">Logout</button>
+          </div>
           <div class="sidebar-toggler x">
             <a href="#" class="sidebar-hide d-xl-none d-block" @click="store.toggleSidebar">
               <i class="bi bi-x bi-middle"></i>
             </a>
+
           </div>
         </div>
       </div>
@@ -108,7 +117,8 @@ watch(() => store.isSidebarActive, (isSidebarActive) => {
 
 
 <style lang="scss" scoped>
-[class^="bi-"]::before, [class*=" bi-"]::before {
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
   vertical-align: text-top;
 }
 </style>
