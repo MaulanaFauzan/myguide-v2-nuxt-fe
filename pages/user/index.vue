@@ -17,9 +17,9 @@
             <div class="card">
                 <div class="card-header">
 
-                    <h4 class="card-title">List Destinasi Aktif</h4>
+                    <h4 class="card-title">List User Aktif</h4>
                     <div style="width: 10%;" class="buttons mt-4">
-                        <button class="btn btn-primary btn-nm">Add Destinasi</button>
+                        <button class="btn btn-primary btn-nm">Add User</button>
                     </div>
                     <div class="row mt-4">
 
@@ -27,9 +27,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 1%">No</th>
-                                    <th scope="col">Photo</th>
-                                    <th scope="col">Destination</th>
-                                    <th scope="col">Description</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
                                     <th scope="col" style="width: 7%;">Action</th>
                                 </tr>
                             </thead>
