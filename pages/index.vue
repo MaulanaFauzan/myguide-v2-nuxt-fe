@@ -190,10 +190,10 @@ const optionsIndonesia = {
       <h3>Profile Statistics</h3>
     </div>
     <div class="page-content">
-      <section class="row">
+      <section class="row d-flex">
         <div class="col-12 col-lg-9">
-          <div class="row">
-            <div class="col-6 col-lg-3 col-md-6">
+          <div class="row d-flex">
+            <div v-if="me.user.roles_id == 1" class="col-6 col-lg-3 col-md-6">
               <div class="card">
                 <div class="card-body px-3 py-4-5">
                   <div class="row">
@@ -336,7 +336,7 @@ const optionsIndonesia = {
                 </div>
               </div>
             </div> -->
-            <div class="col-12 col-xl-8">
+            <div v-if="me.user.roles_id == 1" class="col-12 col-xl-8">
               <div class="card">
                 <div class="card-header">
                   <h4>Last User Register</h4>
@@ -504,8 +504,9 @@ const fetchUserData = async () => {
 
     me.value = response.data.data;
     me.value.lastuser = response.data.data.lastuser;
+    // me.value.user = response.data.data.user;
 
-    console.log(me.value.lastuser);
+    console.log(me.value.user);
 
     loading.value = false;
 

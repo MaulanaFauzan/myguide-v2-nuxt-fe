@@ -30,7 +30,7 @@ definePageMeta({
                             <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                 data-reference="parent">
-                                <span class="sr-only">Toggle Dropdown</span>
+                                <span class="sr-only">Select Role</span>
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Admin</a>
