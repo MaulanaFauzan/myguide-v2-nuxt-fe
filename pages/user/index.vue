@@ -6,8 +6,8 @@
                 <div class="row">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><nuxt-link to="/">Dashboard</nuxt-link></li>
-                            <li class="breadcrumb-item active" aria-current="page">Destination</li>
+                            <li class="breadcrumb-item"><nuxt-link to="/">Home</nuxt-link></li>
+                            <li class="breadcrumb-item active" aria-current="page">User</li>
                         </ol>
                     </nav>
                 </div>
@@ -39,7 +39,8 @@
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.email }}</td>
                                     <td>{{ item.role_name }}</td>
-                                    <td><nuxt-link :to="`/user/edit?id=${item.id}`">Edit</nuxt-link> | Delete</td>
+                                    <td><nuxt-link :to="`/user/edit?id=${item.id}`">Edit</nuxt-link> | <a
+                                            style="color:blue" @click="deleteUser(item.id)">Delete</a></td>
                                 </tr>
 
 
@@ -109,6 +110,52 @@ const loading = ref(false);
 onMounted(() => {
     fetchUserData();
 });
+
+const deleteUser = async (id) => {
+    const deleteUser = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Are you sure to delete this user?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+    });
+    if (deleteUser.isConfirmed) {
+        loading.value = true;
+        Swal.fire({
+            title: 'Deleting User',
+            html: 'Please wait...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        const token = useCookie('token');
+        await axios.post(`http://127.0.0.1:8000/api/user/delete/` + id, {
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+        }).then(response => {
+
+            location.reload()
+        });
+        await refreshNuxtData()
+        loading.value = false;
+        if (!loading.value) {
+            Swal.close();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'User registered successfully.',
+            });
+
+        }
+    }
+
+}
 
 const next = () => {
     loading.value = true

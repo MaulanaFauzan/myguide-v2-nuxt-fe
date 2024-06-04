@@ -1,8 +1,3 @@
-<script lang="ts" setup>
-definePageMeta({
-    layout: '1-column'
-})
-</script>
 <template>
     <div class="container">
         <div class="card mt-5">
@@ -10,45 +5,210 @@ definePageMeta({
                 <h4 class="card-title">Edit User</h4>
             </div>
             <div class="card-body">
-                <form>
+                <form @submit.prevent="onSubmit">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Nama</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                            placeholder="Masukkan Nama">
+                        <input v-model="user.data.name" type="text" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" placeholder="Masukkan Nama">
                         <small id="emailHelp" class="form-text text-muted">Ini akan mengubah Nama User.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                            placeholder="Masukkan Nama">
+                        <input v-model="user.data.email" type="email" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" placeholder="Masukkan Nama">
                         <small id="emailHelp" class="form-text text-muted">Ini akan mengubah Email User.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">password</label>
+                        <input v-model="user.data.password" type="password" class="form-control" id="InputPass"
+                            placeholder="Masukkan Password">
+
+                        <small id="emailHelp" class="form-text text-muted">Gunakan kombinasi huruf kapital.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Role User</label>
                         <br />
                         <div class="btn-group dropdown me-1 mb-1">
-                            <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                data-reference="parent">
-                                <span class="sr-only">Select Role</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Admin</a>
-                                <a class="dropdown-item" href="#">TourGuide</a>
-                                <a class="dropdown-item" href="#">Guest</a>
-                                <div class="dropdown-divider"></div>
-                            </div>
+
+                            <select v-model="user.data.roles_id" class="form-select"
+                                aria-label="Disabled select example">
+                                <option disabled selected hidden>Please select a role</option>
+                                <option value="1">Admin</option>
+                                <option value="3">TourGuide</option>
+                                <option value="2">User</option>
+                            </select>
                         </div>
                     </div>
 
                     <br />
                     <br />
                     <div class="buttons">
-                        <button class="btn btn-primary">Save</button>
-                        <button class="btn btn-danger">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+
                     </div>
                 </form>
+                <div class="buttons">
+                    <nuxt-link to="/user"><button class="btn btn-danger btn-nm">Cancel</button></nuxt-link>
+                </div>
             </div>
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+    layout: '1-column'
+});
+import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+
+const user = ref({
+    data: []
+});
+
+
+
+
+
+
+
+const loading = ref(false);
+
+onMounted(() => {
+    fetchUserData();
+});
+
+const fetchUserData = async () => {
+    try {
+        const route = useRoute();
+
+
+        loading.value = true;
+
+
+        const token = useCookie('token');
+        const response = await axios.get('http://127.0.0.1:8000/api/user/edit/' + route.query.id, {
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+        });
+
+        user.value.data = response.data.data;
+        // me.value.user = response.data.data.user;
+
+
+        loading.value = false;
+
+
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        loading.value = false;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to fetch user data. Please try again later.',
+        });
+    }
+};
+
+// const changePhoto = async () => {
+//     try {
+//         const fileInput = document.createElement('input');
+//         fileInput.type = 'file';
+//         fileInput.accept = 'image/*';
+
+//         fileInput.addEventListener('change', async (event) => {
+//             const file = (event.target as HTMLInputElement).files?.[0];
+//             if (file) {
+//                 const shouldUpdate = await Swal.fire({
+//                     title: 'Confirmation',
+//                     text: 'Are you sure you want to change your photo?',
+//                     icon: 'question',
+//                     showCancelButton: true,
+//                     confirmButtonText: 'Yes',
+//                     cancelButtonText: 'No',
+//                 });
+
+//                 if (shouldUpdate.isConfirmed) {
+//                     const reader = new FileReader();
+//                     reader.onload = () => {
+//                         user.value.pathFoto = reader.result as string; // Update the user's pathFoto with base64 data
+//                     };
+//                     reader.readAsDataURL(file);
+//                     Swal.fire('success', 'Success Update Foto Profile!', 'success')
+//                 }
+//             }
+//         });
+
+//         fileInput.click();
+//     } catch (error) {
+//         console.error('Error changing user photo:', error);
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Error',
+//             text: 'Failed to change user photo. Please try again later.',
+//         });
+//     }
+// };
+
+
+
+const onSubmit = async () => {
+    try {
+        const update = await Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to change your data?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        });
+        if (update.isConfirmed) {
+            loading.value = true;
+            Swal.fire({
+                title: 'Updating Profile',
+                html: 'Please wait...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            const userPost = ref({
+
+                name: user.value.data.name,
+                email: user.value.data.email,
+                password: user.value.data.password,
+                roles_id: user.value.data.roles_id,
+            });
+
+            const token = useCookie('token');
+            await axios.post(`http://127.0.0.1:8000/api/user/edit/` + user.value.data.id, userPost.value, {
+                headers: {
+                    Authorization: `Bearer ${token.value}`,
+                },
+            });
+
+            loading.value = false;
+            if (!loading.value) {
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Profile updated successfully.',
+                });
+            }
+        }
+
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        loading.value = false;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update profile. Please try again later.',
+        });
+    }
+};
+</script>
