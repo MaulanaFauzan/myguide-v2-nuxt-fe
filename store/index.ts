@@ -5,7 +5,7 @@ import { reactive, ref } from "vue";
 export const useStore = defineStore("main", () => {
   const sidebarItems = reactive(sideBarItems);
   const isSidebarActive = ref(true);
-  const isDark = ref(true);
+  const isDark = ref(false);
   const toggleSidebar = () => (isSidebarActive.value = !isSidebarActive.value);
   const closeSidebar = () => (isSidebarActive.value = false);
   const openSidebar = () => (isSidebarActive.value = true);
