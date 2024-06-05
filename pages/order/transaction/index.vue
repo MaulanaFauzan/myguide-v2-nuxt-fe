@@ -17,43 +17,36 @@
             <div class="card">
                 <div class="card-header">
 
-                    <h4 class="card-title">List Destinasi Aktif</h4>
+                    <h4 class="card-title">List Transaksi</h4>
 
-                    <div v-if="me.roles_id != 2" style="width: 10%;" class="buttons mt-4">
-                        <nuxt-link to="/destination/add"><button class="btn btn-primary btn-nm">Add
-                                Destination</button></nuxt-link>
 
-                    </div>
                     <div class="row mt-4">
 
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 1%">No</th>
-                                    <th scope="col">Photo</th>
-                                    <th scope="col">Destination</th>
+                                    <th scope="col">Nama Wisata</th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Description</th>
+                                    <th scope="col">Tanggal Wisata</th>
+                                    <th scope="col">Metode Pembayaran</th>
+                                    <th scope="col">Nama Tourguide</th>
+                                    <th scope="col">Nama Customer</th>
                                     <th v-if="me.roles_id != 2" scope="col" style="width: 7%;">Action</th>
-                                    <th v-if="me.roles_id != 2" scope="col" style="width: 7%;">Transaksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in destination.data" :key="index" :value="item">
                                     <th scope="row">{{ index + 1 }}</th>
-                                    <td v-if="item.image"><img :src="`https://api.portodev.my.id/${item.image}`"
-                                            width="200" height="200" alt=""></td>
-                                    <td v-else>Image Not-Set</td>
-                                    <td>{{ item.name }}</td>
-                                    <td>Rp. {{ item.price }}</td>
-                                    <td>{{ item.alamat }}</td>
-                                    <td>{{ item.description }}</td>
-                                    <td v-if="me.roles_id != 2"><nuxt-link
-                                            :to="`/destination/edit?id=${item.id}`">Edit</nuxt-link> | <a
-                                            style="color:blue" @click="deletedestination(item.id)">Delete</a></td>
-                                    <td v-if="me.roles_id != 2"><nuxt-link :to="`/order/transaction?id=${item.id}`">View
-                                            Transaksi</nuxt-link></td>
+                                    <td>{{ item.nama_wisata }}</td>
+                                    <td>{{ item.harga_wisata }}</td>
+                                    <td>{{ item.tanggal_wisata }}</td>
+                                    <td>{{ item.metode_pembayaran }}</td>
+                                    <td>{{ item.tourguide_name }}</td>
+                                    <td>{{ item.customer_name }}</td>
+                                    <td v-if="me.roles_id != 2"><button @click="finishOrder(item.id)"
+                                            class="btn btn-success btn-nm">Selesaikan Order</button>
+                                    </td>
 
                                 </tr>
 
@@ -105,12 +98,11 @@ import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 useHead({
-    title: 'GAMA - List Destination',
+    title: 'GAMA - List Transaction',
     meta: [
         { name: 'description', content: 'My amazing site.' }
     ]
 })
-
 const destination = ref({
     data: [],
     current_page: 1,
@@ -163,6 +155,63 @@ onMounted(() => {
     fetchdestinationData();
     fetchMe();
 });
+
+const finishOrder = async (id) => {
+    try {
+        const update = await Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you to finish this transaction?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        });
+        if (update.isConfirmed) {
+            loading.value = true;
+            Swal.fire({
+                title: 'Finishing Transaction',
+                html: 'Please wait...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            const userPost = ref({
+                is_orders_done: 1
+            });
+            const token = useCookie('token');
+            await axios.post(`https://api.portodev.my.id/api/transaction/` + id, userPost.value, {
+                headers: {
+                    Authorization: `Bearer ${token.value}`,
+                },
+            });
+
+            loading.value = false;
+            if (!loading.value) {
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Transaction finished successfully.',
+                });
+                setTimeout(location.reload.bind(location), 3000);
+
+
+
+            }
+        }
+
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        loading.value = false;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update profile. Please try again later.',
+        });
+    }
+};
 
 const deletedestination = async (id) => {
     const deletedestination = await Swal.fire({
@@ -224,10 +273,10 @@ const prev = () => {
 const fetchdestinationData = async () => {
     try {
         loading.value = true;
-
+        const route = useRoute();
 
         const token = useCookie('token');
-        const response = await axios.get('https://api.portodev.my.id/api/wisata?page=' + destination.value.current_page, {
+        const response = await axios.get('https://api.portodev.my.id/api/transaction?page=' + destination.value.current_page + '&id=' + route.query.id, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },

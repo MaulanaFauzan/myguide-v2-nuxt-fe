@@ -66,7 +66,12 @@ import axios from 'axios';
 const user = ref({
     data: []
 });
-
+useHead({
+    title: 'GAMA - Edit User',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 
 
 

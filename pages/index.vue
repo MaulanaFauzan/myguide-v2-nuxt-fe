@@ -477,7 +477,12 @@ const optionsIndonesia = {
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+useHead({
+  title: 'GAMA - Dashboard',
+  meta: [
+    { name: 'description', content: 'My amazing site.' }
+  ]
+})
 const me = ref({
   countUser: '',
   countwisata: '',

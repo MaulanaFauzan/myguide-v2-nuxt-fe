@@ -2,7 +2,7 @@
     <div class="container">
         <div class="card mt-5">
             <div class="card-header">
-                <h4 class="card-title">Edit Destinasi</h4>
+                <h4 class="card-title">Add Destinasi</h4>
             </div>
             <div class="card-body">
                 <form @submit.prevent="onSubmit" enctype="multipart/form-data">
@@ -40,9 +40,12 @@
                     <br />
                     <div class="buttons">
                         <button class="btn btn-primary">Save</button>
-                        <button class="btn btn-danger">Cancel</button>
+
                     </div>
                 </form>
+                <div class="buttons">
+                    <nuxt-link to="/destination"><button class="btn btn-danger btn-nm">Cancel</button></nuxt-link>
+                </div>
             </div>
         </div>
     </div>
@@ -52,10 +55,17 @@
 definePageMeta({
     layout: '1-column'
 });
+
+
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+useHead({
+    title: 'GAMA - Add Destination',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 const destination = ref({
     data: []
 });

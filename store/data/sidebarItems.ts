@@ -26,6 +26,10 @@ export default [
         name: "List",
         url: "/destination",
       },
+      {
+        name: "Order Destination",
+        url: "/order",
+      },
     ],
   },
   // {

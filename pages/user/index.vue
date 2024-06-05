@@ -90,7 +90,12 @@
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+useHead({
+    title: 'GAMA - List User',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 const user = ref({
     data: [],
     current_page: 1,
@@ -192,12 +197,12 @@ const deleteUser = async (id) => {
 const next = () => {
     loading.value = true
     user.value.current_page++
-    fetchUserData
+    fetchUserData()
 };
 const prev = () => {
     loading.value = true
     user.value.current_page--
-    fetchUserData
+    fetchUserData()
 };
 
 const fetchUserData = async () => {
@@ -206,7 +211,7 @@ const fetchUserData = async () => {
 
 
         const token = useCookie('token');
-        const response = await axios.get('https://api.portodev.my.id/api/user', {
+        const response = await axios.get('https://api.portodev.my.id/api/user?page=' + user.value.current_page, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },

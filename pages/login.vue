@@ -137,7 +137,12 @@ button {
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/store/auth";
 import Swal from "sweetalert2";
-
+useHead({
+    title: 'GAMA - Login',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 definePageMeta({
     layout: 'noauth',
 })

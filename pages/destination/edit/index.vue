@@ -40,9 +40,12 @@
                     <br />
                     <div class="buttons">
                         <button class="btn btn-primary">Save</button>
-                        <button class="btn btn-danger">Cancel</button>
+
                     </div>
                 </form>
+                <div class="buttons">
+                    <nuxt-link to="/destination"><button class="btn btn-danger btn-nm">Cancel</button></nuxt-link>
+                </div>
             </div>
         </div>
     </div>
@@ -52,6 +55,13 @@
 definePageMeta({
     layout: '1-column'
 });
+
+useHead({
+    title: 'GAMA - Edit Destination',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';

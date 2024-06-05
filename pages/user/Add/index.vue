@@ -71,7 +71,12 @@ definePageMeta({
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+useHead({
+    title: 'GAMA - Add User',
+    meta: [
+        { name: 'description', content: 'My amazing site.' }
+    ]
+})
 const user = ref({
     data: []
 });
