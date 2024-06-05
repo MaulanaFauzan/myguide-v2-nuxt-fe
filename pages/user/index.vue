@@ -18,7 +18,7 @@
                 <div class="card-header">
 
                     <h4 class="card-title">List User Aktif</h4>
-                    <div style="width: 10%;" class="buttons mt-4">
+                    <div v-if="me.roles_id == 1" style="width: 10%;" class="buttons mt-4">
                         <nuxt-link to="/user/add"><button class="btn btn-primary btn-nm">Add User</button></nuxt-link>
                     </div>
                     <div class="row mt-4">
@@ -30,7 +30,7 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Role</th>
-                                    <th scope="col" style="width: 7%;">Action</th>
+                                    <th v-if="me.roles_id != 2" scope="col" style="width: 7%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,8 +39,9 @@
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.email }}</td>
                                     <td>{{ item.role_name }}</td>
-                                    <td><nuxt-link :to="`/user/edit?id=${item.id}`">Edit</nuxt-link> | <a
-                                            style="color:blue" @click="deleteUser(item.id)">Delete</a></td>
+                                    <td v-if="me.roles_id != 2"><nuxt-link
+                                            :to="`/user/edit?id=${item.id}`">Edit</nuxt-link> | <a style="color:blue"
+                                            @click="deleteUser(item.id)">Delete</a></td>
                                 </tr>
 
 
@@ -103,13 +104,44 @@ const user = ref({
     prev_page_url: null,
 });
 
-
+const me = ref({ roles_id: '' });
 
 const loading = ref(false);
 
 onMounted(() => {
     fetchUserData();
+    fetchMe();
 });
+
+const fetchMe = async () => {
+    try {
+        loading.value = true;
+
+
+        const token = useCookie('token');
+        const response = await axios.get('https://api.portodev.my.id/api/me', {
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+        });
+
+        me.value.roles_id = response.data.data.user.roles_id;
+        // me.value.user = response.data.data.user;
+
+
+        loading.value = false;
+
+
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        loading.value = false;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to fetch user data. Please try again later.',
+        });
+    }
+};
 
 const deleteUser = async (id) => {
     const deleteUser = await Swal.fire({
@@ -133,7 +165,7 @@ const deleteUser = async (id) => {
         });
 
         const token = useCookie('token');
-        await axios.post(`http://127.0.0.1:8000/api/user/delete/` + id, {
+        await axios.post(`https://api.portodev.my.id/api/user/delete/` + id, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },
@@ -174,7 +206,7 @@ const fetchUserData = async () => {
 
 
         const token = useCookie('token');
-        const response = await axios.get('http://127.0.0.1:8000/api/user', {
+        const response = await axios.get('https://api.portodev.my.id/api/user', {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },

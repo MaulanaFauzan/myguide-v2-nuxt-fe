@@ -227,7 +227,19 @@ const optionsIndonesia = {
                             </div>
                         </div>
                     </div> -->
-            <div class="col-6 col-lg-3 col-md-6">
+            <div v-if="me.user.roles_id == 2" class="col-10 col-lg-3 col-md-10">
+              <div class="card">
+                <div class="card-body px-3 py-4-5">
+                  <div class="row">
+
+                    <div class="col-md-10">
+                      <h3 class="text-muted font-semibold">Halo, Welcome Back {{ me.user.name }}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="me.user.roles_id == 1 || me.user.roles_id == 3" class="col-6 col-lg-3 col-md-6">
               <div class="card">
                 <div class="card-body px-3 py-4-5">
                   <div class="row">
@@ -236,7 +248,7 @@ const optionsIndonesia = {
                         <i class="iconly-boldAdd-User"></i>
                       </div>
                     </div>
-                    <div v-if="me.user.roles_id == 1 || me.user.roles_id == 3" class="col-md-8">
+                    <div class="col-md-8">
                       <h6 class="text-muted font-semibold">Jumlah Wisata Aktif</h6>
                       <h6 class="font-extrabold mb-0">{{ me.countWisata }}</h6>
                     </div>
@@ -336,7 +348,7 @@ const optionsIndonesia = {
                 </div>
               </div>
             </div> -->
-            <div v-if="me.user.roles_id == 1" class="col-12 col-xl-8">
+            <div v-if="me.user.roles_id != 2" class="col-12 col-xl-8">
               <div class="card">
                 <div class="card-header">
                   <h4>Last User Register</h4>
@@ -496,7 +508,7 @@ const fetchUserData = async () => {
 
 
     const token = useCookie('token');
-    const response = await axios.get('http://127.0.0.1:8000/api/me', {
+    const response = await axios.get('https://api.portodev.my.id/api/me', {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },

@@ -25,7 +25,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
   //     return navigateTo("/home/");
   //   };
   // @ts-ignore
-  if (!token.value && to?.name !== "login") {
-    return navigateTo("/login");
+
+  if (!token.value) {
+    if (!token.value && to?.name !== "login" && to?.name !== "register") {
+      return navigateTo("/login");
+    }
   }
 });

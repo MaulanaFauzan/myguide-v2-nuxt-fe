@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", {
     async authenticateUser({ email, password }: UserPayloadInterface) {
       // useFetch from nuxt 3
       const { data, pending }: any = await useFetch(
-        "http://127.0.0.1:8000/api/login",
+        "https://api.portodev.my.id/api/login",
         {
           method: "post",
           headers: {

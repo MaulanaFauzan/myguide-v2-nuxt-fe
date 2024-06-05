@@ -2,7 +2,7 @@
     <div class="container">
         <div class="card mt-5">
             <div class="card-header">
-                <h4 class="card-title">Add User</h4>
+                <h4 class="card-title">Register User</h4>
             </div>
             <div class="card-body">
                 <form @submit.prevent="onSubmit">
@@ -35,30 +35,15 @@
                         <small id="emailHelp" class="form-text text-muted">Gunakan kombinasi huruf kapital.</small>
                     </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Role User</label>
-                        <br />
-                        <div class="btn-group dropdown me-1 mb-1">
 
-                            <select v-model="user.data.roles_id" class="form-select"
-                                aria-label="Disabled select example">
-                                <option disabled selected hidden>Please select a role</option>
-                                <option value="1">Admin</option>
-                                <option value="3">TourGuide</option>
-                                <option value="2">User</option>
-                            </select>
-                        </div>
-                    </div>
 
                     <br />
                     <br />
                     <div class="buttons">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Register</button>
                     </div>
                 </form>
-                <div class="buttons">
-                    <nuxt-link to="/user"><button class="btn btn-danger btn-nm">Cancel</button></nuxt-link>
-                </div>
+
             </div>
         </div>
     </div>
@@ -103,14 +88,10 @@ const onSubmit = async () => {
                 email: user.value.data.email,
                 password: user.value.data.password,
                 password_confirmation: user.value.data.password_confirmation,
-                roles_id: user.value.data.roles_id,
+                roles_id: '2',
             });
             const token = useCookie('token');
-            await axios.post(`https://api.portodev.my.id/api/user/register`, userPost.value, {
-                headers: {
-                    Authorization: `Bearer ${token.value}`,
-                },
-            });
+            await axios.post(`https://api.portodev.my.id/api/register`, userPost.value);
 
             loading.value = false;
             if (!loading.value) {

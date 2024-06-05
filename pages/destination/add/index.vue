@@ -62,48 +62,48 @@ const destination = ref({
 
 const loading = ref(false);
 
-onMounted(() => {
-    fetchdestinationData();
-});
+// onMounted(() => {
+//     fetchdestinationData();
+// });
 
 const handleFileChange = (e) => {
     destination.value.data.image = e.target.files[0];
 
 }
 
-const fetchdestinationData = async () => {
-    try {
-        const route = useRoute();
+// const fetchdestinationData = async () => {
+//     try {
+//         const route = useRoute();
 
 
-        loading.value = true;
+//         loading.value = true;
 
 
-        const token = useCookie('token');
-        const response = await axios.get('https://api.portodev.my.id/api/wisata/' + route.query.id, {
-            headers: {
-                Authorization: `Bearer ${token.value}`,
+//         const token = useCookie('token');
+//         const response = await axios.get('https://api.portodev.my.id/api/wisata/' + route.query.id, {
+//             headers: {
+//                 Authorization: `Bearer ${token.value}`,
 
-            },
-        });
+//             },
+//         });
 
-        destination.value.data = response.data.data;
-        // me.value.destination = response.data.data.destination;
-
-
-        loading.value = false;
+//         destination.value.data = response.data.data;
+//         // me.value.destination = response.data.data.destination;
 
 
-    } catch (error) {
-        console.error('Error fetching destination data:', error);
-        loading.value = false;
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to fetch destination data. Please try again later.',
-        });
-    }
-};
+//         loading.value = false;
+
+
+//     } catch (error) {
+//         console.error('Error fetching destination data:', error);
+//         loading.value = false;
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Error',
+//             text: 'Failed to fetch destination data. Please try again later.',
+//         });
+//     }
+// };
 
 
 
@@ -140,7 +140,7 @@ const onSubmit = async () => {
             });
 
             const token = useCookie('token');
-            await axios.post(`https://api.portodev.my.id/api/wisata/` + destination.value.data.id, destinationPost.value, {
+            await axios.post(`https://api.portodev.my.id/api/wisata`, destinationPost.value, {
                 headers: {
                     Authorization: `Bearer ${token.value}`,
                     'Content-Type': 'multipart/form-data'
@@ -155,10 +155,9 @@ const onSubmit = async () => {
                     title: 'Success',
                     text: 'Profile updated successfully.',
                 });
-                const router = useRouter();
-                router.back()
-
             }
+            const router = useRouter();
+            router.back()
         }
 
     } catch (error) {

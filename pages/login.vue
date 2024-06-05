@@ -122,6 +122,7 @@ button {
                             <input type="password" placeholder="Password" v-model="user.password" id="password" />
                             <div>
                                 <button>Log In</button>
+                                Don't have account? <nuxt-link to="/register"><u>register here</u></nuxt-link>
                             </div>
 
                         </form>

@@ -88,7 +88,7 @@ const fetchUserData = async () => {
 
 
         const token = useCookie('token');
-        const response = await axios.get('http://127.0.0.1:8000/api/user/edit/' + route.query.id, {
+        const response = await axios.get('https://api.portodev.my.id/api/user/edit/' + route.query.id, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },
@@ -184,7 +184,7 @@ const onSubmit = async () => {
             });
 
             const token = useCookie('token');
-            await axios.post(`http://127.0.0.1:8000/api/user/edit/` + user.value.data.id, userPost.value, {
+            await axios.post(`https://api.portodev.my.id/api/user/edit/` + user.value.data.id, userPost.value, {
                 headers: {
                     Authorization: `Bearer ${token.value}`,
                 },
@@ -198,6 +198,9 @@ const onSubmit = async () => {
                     title: 'Success',
                     text: 'Profile updated successfully.',
                 });
+                const router = useRouter();
+                router.back()
+
             }
         }
 
