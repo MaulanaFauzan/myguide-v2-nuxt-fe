@@ -87,11 +87,12 @@ watch(() => store.isSidebarActive, (isSidebarActive) => {
         <div class="d-flex justify-content-between">
           <div class="logo">
             <nuxt-link to="/"><img src="~/assets/images/logo/logo.png" alt="Logo"></nuxt-link>
-
+            <Dark />
           </div>
-          <div style="width: 40%;" class="buttons mt-1">
+          <div style="width: 40%;" class="buttons mt-4">
             <button @click="logout" class="btn btn-danger round">Logout</button>
           </div>
+
           <div class="sidebar-toggler x">
             <a href="#" class="sidebar-hide d-xl-none d-block" @click="store.toggleSidebar">
               <i class="bi bi-x bi-middle"></i>
