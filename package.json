@@ -27,6 +27,7 @@
     "vue3-apexcharts": "^1.4.1"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.17.3",
     "@nuxtjs/google-fonts": "^3.0.1",
     "@nuxtjs/moment": "^1.6.1",
     "@pinia/nuxt": "^0.4.11",

@@ -5,7 +5,10 @@ export default defineNuxtConfig({
     "assets/scss/iconly.scss",
   ],
 
-  plugins: [{ src: "~/plugins/bootstrap.client", mode: "client" }],
+  plugins: [
+    { src: "~/plugins/bootstrap.client", mode: "client" },
+    "~/plugins/tawk-to.client.ts",
+  ],
   modules: [
     [
       "@pinia/nuxt",
