@@ -19,8 +19,17 @@ export const useAuthStore = defineStore("auth", {
     setLoggedIn(authenticated: boolean): void {
       this.authenticated = authenticated;
     },
+
     async authenticateUser({ email, password }: UserPayloadInterface) {
-      // useFetch from nuxt 3
+      Swal.fire({
+        title: "Checking credentials!",
+        html: "Please wait...",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const { data, pending }: any = await useFetch(
         "https://api.portodev.my.id/api/login",
         {
@@ -34,14 +43,38 @@ export const useAuthStore = defineStore("auth", {
           },
         }
       );
-      const token = useCookie("token"); // useCookie new hook in nuxt 3
-      const user = useCookie("user"); // useCookie new hook in nuxt 3
-      user.value = data.value.data.user;
-      token.value = data.value.data.token;
-      this.loading = pending;
-      console.log(data);
 
-      if (data.value) {
+      const token = useCookie("token");
+      const user = useCookie("user");
+      this.loading = pending;
+      const router = useRouter();
+      Swal.close();
+
+      if (data.value != null) {
+        user.value = data.value.data.user;
+        token.value = data.value.data.token;
+      } else {
+        Swal.fire({
+          title: "Failed!",
+          text: "Wrong email or password!",
+          icon: "error",
+          confirmButtonText: "Try Again!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/login");
+          }
+        });
+      }
+
+      if (data.value != null) {
+        Swal.fire({
+          title: "Success",
+          text: "Login Success!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          router.push("/");
+        });
         const token = useCookie("token"); // useCookie new hook in nuxt 3
         const user = useCookie("user"); // useCookie new hook in nuxt 3
         user.value = data.value.data.user;
@@ -51,47 +84,7 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
-    async authenticateUserOauth(userOauth: any) {
-      const token = useCookie("token"); // useCookie new hook in nuxt 3
-      const user = useCookie("user"); // useCookie new hook in nuxt 3
-      user.value = userOauth;
-      token.value = userOauth._token; // set token to cookie
-      if (token.value) {
-        this.authenticated = true; // set authenticated  state value to true
-      }
-    },
-    async registerUser({
-      email,
-      name,
-      password,
-      address,
-      confirmPassword,
-      role,
-    }: UserPayloadInterface) {
-      const config = useRuntimeConfig();
-      const { data, pending }: any = await useFetch(
-        `http://127.0.0.1/api/register`,
-        {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: {
-            name,
-            email,
-            address,
-            password,
-            confirmPassword,
-            role,
-          },
-        }
-      );
-      this.loading = pending;
 
-      if (data.value.data) {
-        const token = useCookie("token");
-        token.value = data?.value?.data?.access_token;
-        this.authenticated = true;
-      }
-    },
     logUserOut() {
       Swal.fire({
         icon: "question",

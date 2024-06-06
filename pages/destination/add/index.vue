@@ -72,50 +72,12 @@ const destination = ref({
 
 const loading = ref(false);
 
-// onMounted(() => {
-//     fetchdestinationData();
-// });
+
 
 const handleFileChange = (e) => {
     destination.value.data.image = e.target.files[0];
 
 }
-
-// const fetchdestinationData = async () => {
-//     try {
-//         const route = useRoute();
-
-
-//         loading.value = true;
-
-
-//         const token = useCookie('token');
-//         const response = await axios.get('https://api.portodev.my.id/api/wisata/' + route.query.id, {
-//             headers: {
-//                 Authorization: `Bearer ${token.value}`,
-
-//             },
-//         });
-
-//         destination.value.data = response.data.data;
-//         // me.value.destination = response.data.data.destination;
-
-
-//         loading.value = false;
-
-
-//     } catch (error) {
-//         console.error('Error fetching destination data:', error);
-//         loading.value = false;
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Error',
-//             text: 'Failed to fetch destination data. Please try again later.',
-//         });
-//     }
-// };
-
-
 
 
 

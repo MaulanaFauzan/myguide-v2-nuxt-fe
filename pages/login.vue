@@ -146,9 +146,9 @@ useHead({
 definePageMeta({
     layout: 'noauth',
 })
-const { authenticateUser } = useAuthStore(); // use auth store
+const { authenticateUser } = useAuthStore();
 
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
+const { authenticated } = storeToRefs(useAuthStore());
 
 const user: any = ref({
     email: "",
@@ -158,65 +158,11 @@ const router = useRouter();
 
 const login = async () => {
     await authenticateUser(user.value);
-    // redirect to homepage if user is authenticated
-    console.log("auth", authenticated);
-    if (authenticated.value) {
-        Swal.fire({
-            title: "Success",
-            text: "Login Success!",
-            icon: "success",
-            confirmButtonText: "OK",
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                //Swal.fire("Saved!", "", "success");
-                router.push("/");
-            }
-        });
-    } else if (!authenticated.value) {
-        Swal.fire({
-            title: "Failed!",
-            text: "Wrong email or password!",
-            icon: "error",
-            confirmButtonText: "Try Again!",
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                //Swal.fire("Saved!", "", "success");
-                router.push("/login");
-            }
-        });
-    }
+
+
+
+
 };
 
-// import {
-//     GoogleSignInButton,
-//     type CredentialResponse,
-// } from "vue3-google-signin";
-// import { decodeCredential } from "vue3-google-signin";
-// // handle success event
-// const handleLoginSuccess = async (response: CredentialResponse) => {
-//     let { credential } = response;
-//     credential = credential !== undefined ? credential : "false";
-//     if (credential != "false") {
-//         const decodedCredential = decodeCredential(credential);
-//         console.log(decodedCredential);
-//         const url = `http://localhost:9090/user/OAuthGoogle?${getQueryParams(
-//             decodedCredential
-//         )}`;
-//         window.location.href = url;
-//     }
-// };
 
-// const getQueryParams = (obj: any) => {
-//     const params = new URLSearchParams();
-//     for (const key in obj) {
-//         params.append(key, obj[key]);
-//     }
-//     return params.toString();
-// };
-// // handle an error event
-// const handleLoginError = () => {
-//     console.error("Login failed");
-// };
 </script>

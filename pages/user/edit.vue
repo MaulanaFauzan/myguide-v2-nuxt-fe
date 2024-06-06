@@ -117,46 +117,6 @@ const fetchUserData = async () => {
     }
 };
 
-// const changePhoto = async () => {
-//     try {
-//         const fileInput = document.createElement('input');
-//         fileInput.type = 'file';
-//         fileInput.accept = 'image/*';
-
-//         fileInput.addEventListener('change', async (event) => {
-//             const file = (event.target as HTMLInputElement).files?.[0];
-//             if (file) {
-//                 const shouldUpdate = await Swal.fire({
-//                     title: 'Confirmation',
-//                     text: 'Are you sure you want to change your photo?',
-//                     icon: 'question',
-//                     showCancelButton: true,
-//                     confirmButtonText: 'Yes',
-//                     cancelButtonText: 'No',
-//                 });
-
-//                 if (shouldUpdate.isConfirmed) {
-//                     const reader = new FileReader();
-//                     reader.onload = () => {
-//                         user.value.pathFoto = reader.result as string; // Update the user's pathFoto with base64 data
-//                     };
-//                     reader.readAsDataURL(file);
-//                     Swal.fire('success', 'Success Update Foto Profile!', 'success')
-//                 }
-//             }
-//         });
-
-//         fileInput.click();
-//     } catch (error) {
-//         console.error('Error changing user photo:', error);
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Error',
-//             text: 'Failed to change user photo. Please try again later.',
-//         });
-//     }
-// };
-
 
 
 const onSubmit = async () => {
