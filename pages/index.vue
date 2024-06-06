@@ -510,7 +510,15 @@ onMounted(() => {
 const fetchUserData = async () => {
   try {
     loading.value = true;
-
+    Swal.fire({
+      title: "Initial data!",
+      html: "Please wait...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     const token = useCookie('token');
     const response = await axios.get('https://api.portodev.my.id/api/me', {
@@ -526,6 +534,7 @@ const fetchUserData = async () => {
     console.log(me.value.user);
 
     loading.value = false;
+    Swal.close();
 
 
   } catch (error) {

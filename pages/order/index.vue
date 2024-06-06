@@ -42,7 +42,7 @@
                         <li class="list-group-item"><b>Email : </b>{{ item.tourguide_email }}</li>
 
                     </ul>
-                    <div class="buttons">
+                    <div v-if="me.roles_id == 2" class="buttons">
                         <nuxt-link
                             :to="`/order/add?customer_id=${me.user_id}&tourguide_id=${item.tourguide_id}&product_id=${item.id}`"><button
                                 class="btn btn-outline-primary btn-nm">Order
@@ -173,7 +173,7 @@ const destination = ref({
 
 });
 
-const me = ref({ user_id: '' });
+const me = ref({ user_id: '', roles_id: '' });
 const fetchMe = async () => {
     try {
         loading.value = true;
@@ -187,6 +187,7 @@ const fetchMe = async () => {
         });
 
         me.value.user_id = response.data.data.user.id;
+        me.value.roles_id = response.data.data.user.roles_id;
         // me.value.user = response.data.data.user;
 
 
@@ -217,7 +218,15 @@ onMounted(() => {
 const fetchdestinationData = async () => {
     try {
         loading.value = true;
-
+        Swal.fire({
+            title: "Checking data!",
+            html: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
         const token = useCookie('token');
         const response = await axios.get('https://api.portodev.my.id/api/getWisata', {
@@ -231,6 +240,7 @@ const fetchdestinationData = async () => {
         console.log(destination.value);
 
         loading.value = false;
+        Swal.close();
 
 
     } catch (error) {

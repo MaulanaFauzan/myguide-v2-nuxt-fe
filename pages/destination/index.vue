@@ -213,18 +213,26 @@ const deletedestination = async (id) => {
 const next = () => {
     loading.value = true
     destination.value.current_page++
-    fetchdestinationData
+    fetchdestinationData()
 };
 const prev = () => {
     loading.value = true
     destination.value.current_page--
-    fetchdestinationData
+    fetchdestinationData()
 };
 
 const fetchdestinationData = async () => {
     try {
         loading.value = true;
-
+        Swal.fire({
+            title: "Checking data!",
+            html: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
         const token = useCookie('token');
         const response = await axios.get('https://api.portodev.my.id/api/wisata?page=' + destination.value.current_page, {
@@ -236,6 +244,7 @@ const fetchdestinationData = async () => {
         destination.value = response.data.data;
 
         console.log(destination.value);
+        Swal.close();
 
         loading.value = false;
 

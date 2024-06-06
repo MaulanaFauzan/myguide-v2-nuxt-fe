@@ -213,66 +213,31 @@ const finishOrder = async (id) => {
     }
 };
 
-const deletedestination = async (id) => {
-    const deletedestination = await Swal.fire({
-        title: 'Confirmation',
-        text: 'Are you sure to delete this destination?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-    });
-    if (deletedestination.isConfirmed) {
+
+
+const next = () => {
+    loading.value = true
+    destination.value.current_page++
+    fetchdestinationData()
+};
+const prev = () => {
+    loading.value = true
+    destination.value.current_page--
+    fetchdestinationData()
+};
+
+const fetchdestinationData = async () => {
+    try {
         loading.value = true;
         Swal.fire({
-            title: 'Deleting destination',
-            html: 'Please wait...',
+            title: "Checking data!",
+            html: "Please wait...",
             allowOutsideClick: false,
             showConfirmButton: false,
             willOpen: () => {
                 Swal.showLoading();
             },
         });
-
-        const token = useCookie('token');
-        await axios.delete(`https://api.portodev.my.id/api/wisata/` + id, {
-            headers: {
-                Authorization: `Bearer ${token.value}`,
-            },
-        }).then(response => {
-            loading.value = false;
-            if (!loading.value) {
-                Swal.close();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'destination registered successfully.',
-                });
-
-            }
-            setTimeout(location.reload.bind(location), 3000);
-        });
-
-
-    }
-
-}
-
-const next = () => {
-    loading.value = true
-    destination.value.current_page++
-    fetchdestinationData
-};
-const prev = () => {
-    loading.value = true
-    destination.value.current_page--
-    fetchdestinationData
-};
-
-const fetchdestinationData = async () => {
-    try {
-        loading.value = true;
         const route = useRoute();
 
         const token = useCookie('token');
@@ -287,6 +252,7 @@ const fetchdestinationData = async () => {
         console.log(destination.value);
 
         loading.value = false;
+        Swal.close();
 
 
     } catch (error) {

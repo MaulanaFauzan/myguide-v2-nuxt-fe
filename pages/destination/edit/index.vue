@@ -87,7 +87,15 @@ const fetchdestinationData = async () => {
 
 
         loading.value = true;
-
+        Swal.fire({
+            title: "Checking data!",
+            html: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
 
         const token = useCookie('token');
         const response = await axios.get('https://api.portodev.my.id/api/wisata/' + route.query.id, {
@@ -99,7 +107,7 @@ const fetchdestinationData = async () => {
 
         destination.value.data = response.data.data;
         // me.value.destination = response.data.data.destination;
-
+        Swal.close();
 
         loading.value = false;
 

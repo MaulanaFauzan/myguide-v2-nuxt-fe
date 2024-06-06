@@ -30,7 +30,7 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Role</th>
-                                    <th v-if="me.roles_id != 2" scope="col" style="width: 7%;">Action</th>
+                                    <th v-if="me.roles_id == 1" scope="col" style="width: 7%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,7 +39,7 @@
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.email }}</td>
                                     <td>{{ item.role_name }}</td>
-                                    <td v-if="me.roles_id != 2"><nuxt-link
+                                    <td v-if="me.roles_id == 1"><nuxt-link
                                             :to="`/user/edit?id=${item.id}`">Edit</nuxt-link> | <a style="color:blue"
                                             @click="deleteUser(item.id)">Delete</a></td>
                                 </tr>
@@ -211,6 +211,15 @@ const fetchUserData = async () => {
 
 
         const token = useCookie('token');
+        Swal.fire({
+            title: "Loading Data!",
+            html: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
         const response = await axios.get('https://api.portodev.my.id/api/user?page=' + user.value.current_page, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
@@ -222,6 +231,7 @@ const fetchUserData = async () => {
         console.log(user.value);
 
         loading.value = false;
+        Swal.close()
 
 
     } catch (error) {

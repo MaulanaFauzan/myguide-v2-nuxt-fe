@@ -91,7 +91,15 @@ const fetchUserData = async () => {
 
         loading.value = true;
 
-
+        Swal.fire({
+            title: "Checking data!",
+            html: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            },
+        });
         const token = useCookie('token');
         const response = await axios.get('https://api.portodev.my.id/api/user/edit/' + route.query.id, {
             headers: {
@@ -104,6 +112,8 @@ const fetchUserData = async () => {
 
 
         loading.value = false;
+
+        Swal.close();
 
 
     } catch (error) {
